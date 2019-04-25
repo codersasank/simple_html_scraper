@@ -1,4 +1,5 @@
 from html.parser import HTMLParser
+import urllib.request
 
 class CustomHTMLParser(HTMLParser):
     def __init__(self):
@@ -18,17 +19,34 @@ class CustomHTMLParser(HTMLParser):
 
 
 if __name__== '__main__':
-    simple_str = 'string_to_search_for'
+    #simple_str = 'string_to_search_for'
+    simple_str = 'equal housing lender'
+    
+    my_url = 'http://www.wellsfargo.com'
+    
     parser_obj = CustomHTMLParser()
+    
     #parser_obj.initiate_vars('tag_to_search_for')
-    parser_obj.initiate_vars('hr')
+    parser_obj.initiate_vars('script')
 
-    html_file = open('location_of_html_file//file.html')
-    html_str = html_file.read()
+    #html_file = open('location_of_html_file//file.html')
+    my_request = urllib.request.Request(my_url)
 
-    html_search_result = html_str.find(simple_str)
+    try:
+        url_data = urllib.request.urlopen(my_request)
+    except:
+        print("There was some error opening the URL")
+        
+    html_str = url_data.read().decode('utf8')
+    #html_str = html_file.read()
+
+    #print (html_str)
+
+    html_search_result = html_str.lower().find(simple_str.lower())
     if html_search_result != -1:
         print ('The word {} was found'.format(simple_str))
+    else:
+        print ('The word {} was not found'.format(simple_str))
     
     parser_obj.feed(html_str)
 
